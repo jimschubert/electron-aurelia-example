@@ -3,18 +3,8 @@
 var gulp = require('gulp');
 var exec = require('child_process').exec;
 var args = require('../args');
-var del = require('del');
-var debug = require('gulp-debug');
-var gulpif = require('gulp-if');
-var path = require('path');
 var runSequence = require('run-sequence');
-var changed = require('gulp-changed');
-var plumber = require('gulp-plumber');
-var to5 = require('gulp-babel');
-var sourcemaps = require('gulp-sourcemaps');
 var paths = require('../paths');
-var compilerOptions = require('../babel-options');
-var assign = Object.assign || require('object.assign');
 
 // this task calls the clean task (located
 // in ./clean.js), then runs lint
@@ -58,7 +48,7 @@ gulp.task('build:one', ['build'], function (cb) {
   var commandText = command.join(' ');
   console.log('Executing build: %s', commandText);
   exec(commandText, {
-    cwd: path.normalize(__dirname + '/..')
+    cwd: paths.root
   }, function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
@@ -81,7 +71,7 @@ var runBuild = function (os, arch, asar) {
 
     var commandText = command.join(' ');
     exec(commandText, {
-      cwd: path.normalize(__dirname + '/..')
+      cwd: paths.root
     }, function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
