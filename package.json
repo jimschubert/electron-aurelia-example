@@ -27,6 +27,7 @@
     "es6"
   ],
   "devDependencies": {
+    "babel-eslint": "^3.1.13",
     "conventional-changelog": "0.0.17",
     "del": "^1.2.0",
     "electron-packager": "^4.1.1",
