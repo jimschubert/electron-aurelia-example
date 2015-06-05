@@ -1,8 +1,6 @@
 ## Project-specific
 dist/
 client/jspm_packages
-client/app/*.js
-client/app/*.js.map
 builds/darwin/
 builds/linux/
 builds/win32/
