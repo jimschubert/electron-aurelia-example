@@ -1,0 +1,73 @@
+{
+  "name": "electron-aurelia-example",
+  "productName": "ElectronAureliaExample",
+  "version": "0.0.0",
+  "description": "An example electron app using Aurelia",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/jimschubert/electron-aurelia-example"
+  },
+  "author": {
+    "name": "Jim Schubert",
+    "email": "james.schubert@gmail.com",
+    "url": "ipreferjim.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "debug": "electron --debug-brk=5858 .",
+    "postinstall": "jspm install"
+  },
+  "keywords": [
+    "electron-aurelia-example",
+    "aurelia",
+    "es6"
+  ],
+  "devDependencies": {
+    "conventional-changelog": "0.0.17",
+    "del": "^1.2.0",
+    "electron-packager": "^4.1.1",
+    "electron-prebuilt": "^0.26.1",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0",
+    "gulp-bump": "^0.3.1",
+    "gulp-changed": "^1.2.1",
+    "gulp-debug": "^2.0.1",
+    "gulp-eslint": "^0.13.2",
+    "gulp-if": "^1.2.5",
+    "gulp-plumber": "^1.0.1",
+    "gulp-sourcemaps": "^1.3.0",
+    "gulp-task-listing": "^1.0.0",
+    "jspm": "^0.15.6",
+    "minimist": "^1.1.1",
+    "object.assign": "^1.0.3",
+    "require-dir": "^0.3.0",
+    "rimraf": "^2.3.4",
+    "run-sequence": "^1.1.0",
+    "vinyl-paths": "^1.0.0"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "client"
+    },
+    "dependencies": {
+      "aurelia-animator-css": "github:aurelia/animator-css@^0.2.0",
+      "aurelia-bootstrapper": "github:aurelia/bootstrapper@^0.12.0",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.1",
+      "aurelia-framework": "github:aurelia/framework@^0.11.0",
+      "aurelia-http-client": "github:aurelia/http-client@^0.8.1",
+      "aurelia-router": "github:aurelia/router@^0.8.1",
+      "bootstrap": "github:twbs/bootstrap@^3.3.4",
+      "css": "github:systemjs/plugin-css@^0.1.11",
+      "font-awesome": "npm:font-awesome@^4.3.0"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.1.13",
+      "babel-runtime": "npm:babel-runtime@^5.1.13",
+      "core-js": "npm:core-js@^0.9.4"
+    }
+  }
+}
