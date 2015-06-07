@@ -6,19 +6,36 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body aurelia-app="main">
-<div class="splash">
-  <div class="message">Aurelia Example</div>
-  <i class="fa fa-spinner fa-spin"></i>
+<body>
+<div aurelia-app="main">
+  <div class="splash">
+    <div class="message">Aurelia Example</div>
+    <i class="fa fa-spinner fa-spin"></i>
+  </div>
 </div>
-
 <script src="jspm_packages/system.js"></script>
 <script src="config.js"></script>
 <script>
+  require('../babel').register();
+  var remote = require('remote');
+  var args = remote.getGlobal('args');
+
   System.config({
     "baseURL": __dirname + "/"
   });
   System.import('aurelia-bootstrapper');
+
+  // additional code to run on load.
+  window.onload = function(){
+    require('./dev');
+    require('./test');
+
+    if (args && args.requires && args.requires.length > 0) {
+      for (var i = 0; i < args.requires.length; i++) {
+        require(args.requires[i]);
+      }
+    }
+  };
 </script>
 </body>
 </html>

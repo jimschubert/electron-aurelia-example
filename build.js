@@ -3,7 +3,7 @@
 // This is a wrapper script around electron-packager and other tasks for output.
 var exec = require('child_process').execSync,
 	rimraf = require('rimraf'),
-	args = require('minimist')(process.argv.slice(2)),
+	args = require('yargs').argv,
 	out = args.out || './builds',
 	arch = args.arch || process.arch,
 	platform = args.platform || process.platform,
@@ -27,11 +27,8 @@ var electronPackager = [
 	'--version=0.26.1',
 	'--out=' + adjustedOut,
 	'--platform=' + platform,
-	'--ignore=./builds',
-	'--ignore=./gulpfile.js',
-	'--ignore=./gulpfile.config.js',
-	'--ignore=./readme.md',
-    '--ignore=./build'
+	'--ignore=./builds/',
+	'--ignore=./gulpfile.js'
 ];
 
 if (asar) {
