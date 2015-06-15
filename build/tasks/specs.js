@@ -4,36 +4,42 @@ var path = require('path');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var gulp = require('gulp');
+var args = require('../args');
 var paths = require('../paths');
 var testConfig = require('../test-config');
 var gulpUtil = require('gulp-util');
+var runSequence = require('run-sequence');
+var webdriver = require('gulp-webdriver');
+var webdriverio = require('webdriverio');
+
+var chromedriverPort = 4321;
 
 var isWin32 = process.platform === 'win32';
 
 function getExecutable() {
-  if(isWin32){
+  if (isWin32) {
     return path.join(testConfig.contentsDir, testConfig.name + '.exe');
-  } else if (process.platform === 'darwin'){
+  } else if (process.platform === 'darwin') {
     return path.join(testConfig.contentsDir, 'MacOS', 'Electron');
   } else {
     return path.join(testConfig.contentsDir, testConfig.name);
   }
 }
 
-function runSpecSuite(suite){
-  return function(done){
+function runSpecSuite(suite) {
+  return function (done) {
     var app = getExecutable();
 
-    if(!fs.existsSync(app)){
+    if (!fs.existsSync(app)) {
       var targetPlatform = isWin32 ? 'windows' : process.platform;
-      var arch = (testConfig.arch||process.arch).substring((testConfig.arch||process.arch).length-2, 4);
+      var arch = (testConfig.arch || process.arch).substring((testConfig.arch || process.arch).length - 2, 4);
 
       // NOTE: the system build task isn't a pre-req for the specs task because we can build in one pass
       // and run tests in another pass. Not sure if this matters, though. The targetPlatform and arch
       // could be moved outside of the task, concatenated to build the test system's spec, and added to the pre-reqs.
       var err = new gulpUtil.PluginError({
         plugin: 'specs',
-        message: 'You must first build your target system. run gulp build:'+targetPlatform+':'+arch
+        message: 'You must first build your target system. run gulp build:' + targetPlatform + ':' + arch
       });
       return done(err);
     }
@@ -49,13 +55,13 @@ function runSpecSuite(suite){
       ATOM_INTEGRATION_TESTS_ENABLED: true
     };
 
-    for(var variable in process.env){
-      if(process.env.hasOwnProperty(variable)) {
+    for (var variable in process.env) {
+      if (process.env.hasOwnProperty(variable)) {
         env[variable] = process.env[variable];
       }
     }
 
-    if(isWin32){
+    if (isWin32) {
       // prepend so we'll have cmd.exe /c appname
       args.unshift('/c', app);
     }
@@ -76,8 +82,8 @@ function runSpecSuite(suite){
       return done(new gulpUtil.PluginError(err));
     });
 
-    specRun.on('close', function (code) {
-      if(code !== 0){
+    specRun.on('exit', function (code) {
+      if (code !== 0) {
         var err = new gulpUtil.PluginError({
           plugin: 'specs',
           message: stdout.join('')
@@ -96,7 +102,30 @@ function runSpecSuite(suite){
 //                This is only relevant on 64-bit machines to test 32-bit builds.
 //        --name: override package name in package.json
 //                Must match the same name configured during the build (used in path)
-gulp.task('specs', ['specs:unit', 'specs:e2e']);
+gulp.task('specs', function(callback){
+  return runSequence(
+    'specs:unit', 'specs:e2e', callback
+  );
+});
 
 gulp.task('specs:unit', ['build'], runSpecSuite(paths.unitTestLocation));
-gulp.task('specs:e2e', ['build'], runSpecSuite(paths.e2eTestLocation));
+gulp.task('specs:e2e', ['build'], function () {
+  // TODO: modify gulp-webdriver to allow for jasmine tests? unit tests in jasmine and e2e in mocha is not ideal.
+  return gulp.src(paths.e2eTestLocation + '*.js', {
+    read: false
+  })
+    .pipe(webdriver({
+      host: 'localhost',
+      logLevel: args.debug ? 'verbose' : 'info',
+      port: chromedriverPort,
+      timeout: 90000,
+      desiredCapabilities: {
+        browserName: 'electron',
+        chromeOptions: {
+          binary: testConfig.exe,
+          args: ['e2e']
+        }
+      },
+      applyExtensions: require('../aurelia.extensions.js')
+    }));
+});

@@ -37,14 +37,26 @@ if (process.platform == 'win32') {
   config.location = path.join(paths.dist, process.platform,  arch,  productName + '-win32');
   config.contentsDir = config.location;
   config.appDir = path.join(config.location , 'resources', 'app');
+  config.exe = path.join(config.location, productName + '.exe');
 } else if (process.platform == 'darwin') {
   config.location = path.join(paths.dist, process.platform, arch,  productName + '.app');
   config.contentsDir = path.join(config.location, 'Contents');
   config.appDir = path.join(config.contentsDir, 'Resources', 'app');
+  config.exe = path.join(config.contentsDir, 'MacOS', 'Electron');
 } else {
   config.location = path.join(paths.dist, process.platform, arch);
   config.contentsDir = config.location;
   config.appDir = path.join(config.location , 'resources', 'app');
+  config.exe = path.join(config.contentsDir, productName);
 }
+
+// The name of the gulp task that should build for the running machine
+config.systemBuildTask = ['build',
+  process.platform === 'win32' ? 'windows': process.platform,
+  process.arch === 'x64' ? '64' : '32'
+].join(':');
+
+// The location of the output for the running machine
+config.systemBuildDir =  path.join(paths.dist, process.platform,  process.arch);
 
 module.exports = config;

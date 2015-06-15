@@ -34,6 +34,10 @@ To start an electron instance:
 $ npm start
 ```
 
+### Testing
+
+Run `gulp specs` to run unit tests (`gulp specs:unit`) and e2e tests (`gulp specs:e2e`).
+
 ### Build
 
 Execute a build specific to your dev machine using the `build.js` wrapper script (which provides system defaults and other stuff around electron-packager).

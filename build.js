@@ -15,6 +15,8 @@ var exec = require('child_process').execSync,
 if (nodeVersion < 0.12) {
 	process.stderr.write('This project requires node >= 0.12');
 	process.exit(1);
+} else {
+  process.stdout.write('Preparing app for platform ' + platform + ' ' + arch + '\n');
 }
 
 var electronPackager = [
@@ -24,7 +26,7 @@ var electronPackager = [
 	productName,
 	'--prune',
 	'--arch=' + arch,
-	'--version=0.26.1',
+	'--version=0.27.3',
 	'--out=' + adjustedOut,
 	'--platform=' + platform,
 	'--ignore=./builds/',
@@ -35,7 +37,10 @@ if (asar) {
 	electronPackager.push('--asar');
 }
 
+process.stdout.write('Removing ' + adjustedOut + '\n');
 rimraf.sync(adjustedOut);
+
+process.stdout.write('Executing ' + electronPackager.join(' ') + '\n');
 exec(electronPackager.join(' '), {
 	cwd: __dirname
 });

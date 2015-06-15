@@ -47,6 +47,10 @@ function getArgs(){
 
   args.specsLocation = args['specs-location'];
 
+  args.e2e =  args.e2e || args['test-type'] === 'webdriver';
+
+  args._root = __dirname + '/';
+
   return args;
 }
 
@@ -99,9 +103,16 @@ app.on('ready', function () {
   }
 
   mainWindow = new BrowserWindow({
-    width: 600,
-    height: 400,
-    resizable: false
+    width: args.e2e ? 800 : 600,
+    height: args.e2e ? 600 : 400,
+    resizable: false,
+    // show: !args.e2e,
+    'node-integration': true,
+    'web-preferences': {
+      javascript: true,
+      'web-security': false,
+      'experimental-features': true
+    }
   });
 
   mainWindow.loadUrl(`file://${__dirname}/client/index.html`);

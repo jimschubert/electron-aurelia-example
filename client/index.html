@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div aurelia-app="main">
+<div>
   <div class="splash">
     <div class="message">Aurelia Example</div>
     <i class="fa fa-spinner fa-spin"></i>
@@ -16,19 +16,32 @@
 <script src="jspm_packages/system.js"></script>
 <script src="config.js"></script>
 <script>
-  require('../babel').register();
   var remote = require('remote');
+  var path = require('path');
   var args = remote.getGlobal('args');
 
+  /**
+   * NOTE: There seems to be an issue with how chromedriver starts an electron app,
+   *  which prevents the app from requiring relative paths. Fix is to use __dirname
+   *  as it exists in index.js and map files from there.
+   *  e.g.
+   *    require(args._root + 'client/dev');
+   *  rather than either of these:
+   *    require('./dev');
+   *    require(__dirname + '/dev');
+   *
+   *  ** args._root ** contains trailing slash.
+   */
   System.config({
-    "baseURL": __dirname + "/"
+    "baseURL": args._root + 'client'
   });
-  System.import('aurelia-bootstrapper');
+
+  System.import('main').catch(console.error.bind(console));
 
   // additional code to run on load.
   window.onload = function(){
-    require('./dev');
-    require('./test');
+    require(args._root + 'client/dev');
+    require(args._root + 'client/test');
 
     if (args && args.requires && args.requires.length > 0) {
       for (var i = 0; i < args.requires.length; i++) {

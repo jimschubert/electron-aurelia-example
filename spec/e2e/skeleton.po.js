@@ -1,15 +1,12 @@
-export class PageObject_Skeleton {
+exports = module.exports = function PageObject_Skeleton(client){
+    this.getCurrentPageTitle = function(cb) {
+      return client.title(function(err, result){
+        cb(err, result && result.value);
+      });
+    };
 
-  constructor() {
-
-  }
-
-  getCurrentPageTitle() {
-    return browser.getTitle();
-  }
-
-  navigateTo(href) {
-    element(by.css('a[href="' + href + '"]')).click();
-    return browser.waitForHttpDone();
-  }
-}
+  this.navigateTo = function(href){
+    return client.click('a[href="' + href + '"]')
+      .waitForHttpDone();
+  };
+};

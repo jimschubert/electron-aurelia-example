@@ -1,38 +1,31 @@
-export class PageObject_Welcome {
+exports = module.exports = function PageObject_Welcome(client) {
 
-  constructor() {
+  this.getGreeting = function(cb) {
+    return client.getText('h2',cb);
+  };
 
+  this.setFirstname = function (value) {
+    return client.setValue('*[value\\.bind="firstName"]', value);
+  };
+
+  this.setLastname = function(value) {
+    return client.setValue('*[value\\.bind="lastName"]', value);
+  };
+
+  this.getFullname = function(cb) {
+    return client.getText('.help-block', cb);
+  };
+
+
+  this.pressSubmitButton = function(cb) {
+    return client.click('button[type="submit"]', cb);
+  };
+
+  this.openAlertDialog = function(cb) {
+    // TODO: need to figure out programmatically clicking on an alert in electron's UI
+    //this.pressSubmitButton(function(){
+    //  browser.alertAccept(cb);
+    //});
+    cb();
   }
-
-  getGreeting() {
-    return element(by.tagName('h2')).getText();
-  }
-
-  setFirstname(value) {
-    return element(by.valueBind('firstName')).clear().sendKeys(value);
-  }
-
-  setLastname(value) {
-    return element(by.valueBind('lastName')).clear().sendKeys(value);
-  }
-
-  getFullname() {
-    return element(by.css('.help-block')).getText();
-  }
-
-  pressSubmitButton() {
-    return element(by.css('button[type="submit"]')).click();
-  }
-
-  openAlertDialog() {
-    return browser.wait(() => {
-      this.pressSubmitButton();
-
-      return browser.switchTo().alert().then(
-        // use alert.accept instead of alert.dismiss which results in a browser crash
-        function(alert) { alert.accept(); return true; },
-        function() { return false; }
-      );
-    });
-  }
-}
+};
