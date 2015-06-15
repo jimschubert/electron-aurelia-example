@@ -5,7 +5,6 @@ var exec = require('child_process').exec;
 var args = require('../args');
 var runSequence = require('run-sequence');
 var paths = require('../paths');
-require('longjohn');
 
 // this task calls the clean task (located
 // in ./clean.js), then runs lint

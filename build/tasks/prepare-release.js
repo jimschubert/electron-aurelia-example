@@ -25,6 +25,7 @@ gulp.task('changelog', function(callback) {
     file: paths.root + 'CHANGELOG.md'
   }, function(err, log) {
     fs.writeFileSync(paths.root + 'CHANGELOG.md', log);
+    callback(err);
   });
 });
 
