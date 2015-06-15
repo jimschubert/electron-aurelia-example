@@ -1,4 +1,3 @@
-'use babel';
 process.throwDeprecation = true;
 
 (function(){

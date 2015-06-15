@@ -79,11 +79,6 @@ if (args.ci) {
 }
 
 app.on('ready', function () {
-
-  // registers babel as a require compiler for node javascript
-  // must include 'use babel'; for js to get compiled and cached/loaded using babel.
-  require('./babel').register();
-
   if(args.test){
     var script;
     try {
