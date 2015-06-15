@@ -36,7 +36,15 @@ $ npm start
 
 ### Testing
 
-Run `gulp specs` to run unit tests (`gulp specs:unit`) and e2e tests (`gulp specs:e2e`).
+Unit tests are executed from within a running instance of the app. This allows the unit tests to interact with app source as it is included through jspm. Currently, these tests are written using jasmine.
+
+End-to-end (e2e) tests are executed outside of the application through chromedriver and webdriverio using gulp-webdriver. The package is currently referenced from `jimschubert/gulp-webdriver` with pending changes I hope to have integrated upstream. Because the module executes a standalone selenium server, you'll only need to download and start chromedriver. Get the most recent binaries from [Electron's releases](https://github.com/atom/electron/releases) for your development environment and start chromedriver:
+
+```
+$ ./chromedriver --url-base=/wd/hub --port=4321
+```
+
+Run `gulp specs` to run unit tests (`gulp specs:unit`) and e2e tests (`gulp specs:e2e`). 
 
 ### Build
 
