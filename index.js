@@ -1,14 +1,18 @@
 'use strict';
 global.shellStartTime = global.shellStartTime || +new Date();
 
-const app = require('app');
+const app = require('electron').app;
 const path = require('path');
-const BrowserWindow = require('browser-window');
-const dialog = require('dialog');
+const { BrowserWindow, dialog, crashReporter } = require('electron');
 const yargs = require('yargs');
 
 // report crashes to the Electron project
-require('crash-reporter').start();
+crashReporter.start({
+  productName: 'James Davis',
+  companyName: 'Company Name',
+  submitURL: 'http://localhost/electron/crash-report',
+  autoSubmit: true
+})
 
 // prevent window being GC'd
 let mainWindow = null;
@@ -110,7 +114,7 @@ app.on('ready', function () {
     }
   });
 
-  mainWindow.loadUrl(`file://${__dirname}/client/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/client/index.html`);
 
   mainWindow.on('closed', function () {
     // deref the window
